@@ -57,6 +57,7 @@ public class User implements Serializable {
         this.pwd = pwd;
     }
 
+    /* 自动生成toString方法代码工具 */
     @Override
     public String toString() {
         return "\n[ =======\n" +"id: " + this.id + ", \n" + "name: " + this.name + ", \n" + "account: " + this.account +

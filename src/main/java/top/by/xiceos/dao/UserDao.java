@@ -8,6 +8,17 @@ import top.by.xiceos.entity.User;
 
 import java.util.List;
 
+/**
+ * <p>Title: UserDao</p>
+ * <p>Description:
+ * 使用JPA
+ *      使用扩展方法
+ *      自定义查询
+ * </p>
+ *
+ * @author zwp
+ * @date 2019/1/4 11:45
+ */
 @Repository
 public interface UserDao extends JpaRepository<User, Long> {
 

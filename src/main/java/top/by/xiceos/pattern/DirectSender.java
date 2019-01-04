@@ -6,12 +6,17 @@ import org.springframework.stereotype.Component;
 import top.by.xiceos.config.RabbitConfig;
 import top.by.xiceos.entity.User;
 
+import java.util.List;
+
 @Component
 public class DirectSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(User user) {
-        this.rabbitTemplate.convertAndSend(RabbitConfig.DIRECT_EXCHANGE, "direct.pwl", user);
+    @Autowired
+    private RabbitConfig rabbitConfig;
+
+    public void send(List<User> list) {
+        this.rabbitTemplate.convertAndSend(RabbitConfig.DIRECT_EXCHANGE, rabbitConfig.getdRoutingKey1(), list);
     }
 }

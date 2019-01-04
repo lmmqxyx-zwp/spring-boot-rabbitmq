@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>Title: UserController</p>
- * <p>Description: 控制器</p>
+ * <p>Description: 控制器 使用JPA</p>
  *
  * @author zwp
  * @date 2019/1/3 12:02
