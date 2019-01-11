@@ -1,6 +1,9 @@
 package top.by.xiceos.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,9 @@ public class RabbitConfig {
     @Value("${sbr.topic.exchange.routing.key2}")
     private String tRoutingKey2;
 
+    @Value("${sbr.topic.exchange.routing.key3}")
+    private String tRoutingKey3;
+
     public String getdRoutingKey1() {
         return dRoutingKey1;
     }
@@ -46,6 +52,10 @@ public class RabbitConfig {
         return tRoutingKey2;
     }
 
+    public String gettRoutingKey3() {
+        return tRoutingKey3;
+    }
+
     public static final String FANOUT_QUEUE_1 = "fanout.queue.1";
     public static final String FANOUT_QUEUE_2 = "fanout.queue.2";
     public static final String FANOUT_EXCHANGE = "fanout.exchange";
@@ -56,6 +66,7 @@ public class RabbitConfig {
 
     public static final String TOPIC_QUEUE_1 = "topic.queue.1";
     public static final String TOPIC_QUEUE_2 = "topic.queue.2";
+    public static final String TOPIC_QUEUE_3 = "topic.queue.3";
     public static final String TOPIC_EXCHANGE = "topic.exchange";
 
     @Bean
@@ -119,6 +130,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue topicQueue3() {
+        return new Queue(TOPIC_QUEUE_3);
+    }
+
+    @Bean
     public TopicExchange topicExchange() {
         return new TopicExchange(TOPIC_EXCHANGE);
     }
@@ -132,5 +148,55 @@ public class RabbitConfig {
     public Binding topicBinding2() {
         return BindingBuilder.bind(topicQueue2()).to(topicExchange()).with(this.gettRoutingKey2());
     }
+
+    @Bean
+    public Binding topicBinding3() {
+        return BindingBuilder.bind(topicQueue3()).to(topicExchange()).with(this.gettRoutingKey3());
+    }
+
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+//
+//    /**
+//     * 定制化的amqp模板
+//     * ConfirmCallback接口用于实现消息发送到RabbitMQ交换机后接收ack回调，消息发送到exchange ack
+//     * ReturnCallback接口用于实现发送到RabbitMQ交换器，但无相应队列与交换器绑定的回调，即消息发送不到任何一个队列中 ack
+//     */
+//    @Bean
+//    public RabbitTemplate getRabbitTemplate() {
+//        // 消息发送失败返回到队列中, yml需要配置 publisher-returns: true
+//        rabbitTemplate.setMandatory(true);
+//
+//        // 消息返回, yml需要配置 publisher-returns: true
+//         rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
+//             @Override
+//             public void returnedMessage(
+//                     Message message,
+//                     int replyCode,
+//                     String replyText,
+//                     String exchange,
+//                     String routingKey) {
+//                 System.out.println(message);
+//                 System.out.println(replyCode);
+//                 System.out.println(replyText);
+//                 System.out.println(exchange);
+//                 System.out.println(routingKey);
+//             }
+//         });
+//
+//        // 消息确认, yml需要配置 publisher-confirms: true
+//        rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
+//            @Override
+//            public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+//                if (ack) {
+//                    System.out.println("消息发送成功，id：" + correlationData.getId());
+//                } else {
+//                    System.out.println("消息发送失败，原因：" + cause);
+//                }
+//            }
+//        });
+//
+//        return rabbitTemplate;
+//    }
 
 }
